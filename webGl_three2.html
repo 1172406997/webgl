@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/three.js/r83/three.js"></script>
+    <style>
+        div#canvas-frame {
+            border: none;
+            cursor: pointer;
+            width:600px;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+<script>
+    var renderer;
+    function initThree(){
+        var width = document.getElementById("canvas-frame").clientWidth;
+        var height = document.getElementById("canvas-frame").clientHeight;
+        renderer = new THREE.WebGLRenderer({
+            antialias : true,
+        })
+        renderer .setSize(width,height);
+        document.getElementById("canvas-frame").appendChild(renderer,domElement);
+        rendener.setClearColor(0xffffff,1.0)
+    }
+</script>
+    <div id="canvas-frame"></div>
+</body>
+</html>
