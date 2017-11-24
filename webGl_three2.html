@@ -21,6 +21,7 @@
 
     <div id="canvas-frame"></div>
     <script>
+        //创建渲染器
         var renderer,width,height;
         function initThree(){
             console.log(THREE.REVISION)
@@ -33,6 +34,7 @@
             document.getElementById("canvas-frame").appendChild(renderer.domElement);
             renderer.setClearColor(0xffffff,1.0)
         }
+        //创建相机
         var camera ;
         function initCamera(){
             camera = new THREE.PerspectiveCamera(45,width/height,1,1000);
@@ -53,11 +55,12 @@
         * camera.up 相机以哪个方向为上方
         * camera.lookAt 相机看向哪里
         * */
+        //创建场景
         var scene ;
         function initScene(){
             scene = new THREE.Scene();
         }
-
+        //创建灯光
         var light;
         function initLight(){
             light = new THREE.DirectionalLight(0xFF0000,1.0,0);
