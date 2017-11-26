@@ -5,8 +5,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>相机移动</title>
+    <title>Tween动画引擎测试</title>
+
     <script src="https://cdn.bootcss.com/three.js/r83/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
     <style>
         div#canvas-frame {
             border: none;
@@ -22,6 +24,7 @@
 <div id="canvas-frame"></div>
 <script>
     var renderer,width,height;
+//    var stats;
     function initThree(){
         console.log(THREE.REVISION)
         width = document.getElementById("canvas-frame").clientWidth;
@@ -32,6 +35,12 @@
         renderer .setSize(width,height);
         document.getElementById("canvas-frame").appendChild(renderer.domElement);
         renderer.setClearColor(0xffffff,1.0)
+
+//        stats = new Stats();
+//        stats.domElement.style.position = 'absolute';
+//        stats.domElement.style.left = '0px';
+//        stats.domElement.style.top = '0px';
+//        document.getElementById('canvas-frame').appendChild(stats.domElement);
     }
     var camera ;
     function initCamera(){
@@ -75,10 +84,11 @@
     *
     * */
     var cube;
+    var mesh;
     function initObject(){
         var geometry = new THREE.CylinderGeometry(100,150,400);
         var material = new THREE.MeshLambertMaterial({color:0xFFFF00});
-        var mesh = new THREE.Mesh(geometry,material);
+        mesh = new THREE.Mesh(geometry,material);
         mesh.position = new THREE.Vector3(0,0,0);
         scene.add(mesh);
     }
@@ -88,11 +98,33 @@
         renderer.render(scene,camera);
         requestAnimationFrame(render);
     }
+    function initTween()
+    {
+        new TWEEN.Tween( mesh.position)
+            .to( { x: -400 }, 3000 ).repeat( Infinity ).start();
+    }
+//    var stats;
     function animetion (){
-        camera.position.x = camera.position.x + 1;
+//        mesh.position.x = mesh.position.x - 1;// 参照物不同，相机加向右，内容减向右
         renderer.render(scene,camera);
         requestAnimationFrame(animetion);
+//        stats.update();//这个函数真好用
+
+        TWEEN.update();
     }
+//    function stats(){
+//        stats = new Stats();
+//        stats.setMode(1);//0 fps 1 ms
+//        //位置放在左上角
+//        stats.domElement.style.position = "absolute";
+//        stats.domElement.style.left = "0px";
+//        stats.domElement.style.top = "0px";
+//        document.body.appendChild(stats.domElement);
+//        setInterval(function () {
+//            stats.begin();
+//            stats.end();
+//        },1000/60)
+//    }
     function threeStart(){
         initThree();
         initCamera();
@@ -100,7 +132,10 @@
         initLight();
         initObject();
         render();
+//        stats();
+        initTween();
         animetion();
+
     }
 
     threeStart()
