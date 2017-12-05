@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>三维空间之-正投影相机</title>
+
+    <script src="https://cdn.bootcss.com/three.js/r83/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
+    <style>
+        div#canvas-frame {
+            border: none;
+            cursor: pointer;
+            width:100%;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+    </style>
+</head>
+<body >
+
+<div id="canvas-frame"></div>
+<script>
+    var renderer,width,height;
+//    var stats;
+    function initThree(){
+        console.log(THREE.REVISION)
+        width = document.getElementById("canvas-frame").clientWidth;
+        height = document.getElementById("canvas-frame").clientHeight;
+        renderer = new THREE.WebGLRenderer({
+            antialias : true,
+        })
+        renderer .setSize(width,height);
+        document.getElementById("canvas-frame").appendChild(renderer.domElement);
+        renderer.setClearColor(0xffffff,1.0)
+
+//        stats = new Stats();
+//        stats.domElement.style.position = 'absolute';
+//        stats.domElement.style.left = '0px';
+//        stats.domElement.style.top = '0px';
+//        document.getElementById('canvas-frame').appendChild(stats.domElement);
+    }
+    var camera ;
+    function initCamera(){
+        camera = new THREE.PerspectiveCamera(45,width/height,1,1000);
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 600;
+        camera.up.x = 0;
+        camera.up.y = 1;
+        camera.up.z = 0;
+        camera.lookAt({
+            x:0,
+            y:0,
+            z:0
+        })
+    }
+    /*
+    * camera . position 相机的位置
+    * camera.up 相机以哪个方向为上方
+    * camera.lookAt 相机看向哪里
+    * */
+    var scene ;
+    function initScene(){
+        scene = new THREE.Scene();
+    }
+
+    //灯光初始化改变
+    var light;
+    function initLight(){
+//        light = new THREE.DirectionalLight(0xFF0000,1.0,0);
+//        light.position.set(100,100,200);
+//        scene.add(light);
+        light = new THREE.AmbientLight(0xFFFFFF);
+        light.position.set(100,100,200);
+        scene.add(light);
+        light = new THREE.PointLight(0x00ff00);
+        light.position.set(0,0,300);
+        scene.add(light);
+    }
+    /*
+    *
+    * */
+    var cube;
+    var mesh;
+    function initObject(){
+        var geometry = new THREE.CylinderGeometry(70,100,200);
+        var material = new THREE.MeshLambertMaterial({color:0xFFFF00});
+        mesh = new THREE.Mesh(geometry,material);
+        mesh.position = new THREE.Vector3(0,0,0);
+        scene.add(mesh);
+    }
+
+    function render (){
+        renderer.clear();
+        renderer.render(scene,camera);
+        requestAnimationFrame(render);
+    }
+    function initTween()
+    {
+        new TWEEN.Tween( mesh.position)
+            .to( { x: -400 }, 3000 ).repeat( Infinity ).start();
+    }
+//    var stats;
+    function animetion (){
+//        mesh.position.x = mesh.position.x - 1;// 参照物不同，相机加向右，内容减向右
+        renderer.render(scene,camera);
+        requestAnimationFrame(animetion);
+//        stats.update();//这个函数真好用
+
+        TWEEN.update();
+    }
+    function changeFov (){
+        var txtFov = document.getElementById('txtFov').value();
+        var val = parseFloat(txtFov);
+        setCameraFov(val);
+    }
+    function threeStart(){
+        initThree();
+        initCamera();
+        initScene();
+        initLight();
+        initObject();
+        animetion();
+
+    }
+
+    threeStart()
+</script>
+</body>
+</html>
