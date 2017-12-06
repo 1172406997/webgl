@@ -117,6 +117,10 @@
         var val = parseFloat(txtFov);
         setCameraFov(val);
     }
+    function setCameraFor(fov){
+        camera.fov = fov;
+        camera.updateProjectionMatrix();
+    }
     function threeStart(){
         initThree();
         initCamera();
