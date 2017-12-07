@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>复古文字效果创建</title>
+</head>
+<body>
+<script src="../build/three.js"></script>
+<script src="../js/controls/TrackballControls.js"></script>
+<script src="../js/renderers/Projector.js"></script>
+<script src="../js/renderers/CanvasRenderer.js"></script>
+
+<script src="../js/libs/stats.min.js"></script>
+
+<script>
+    /*
+    * 创建 容器  性能监控
+    * 1.相机，场景，渲染器就位
+    * 2.控制物体大小
+    * */
+
+    var container ,stats;
+    var camera , scene, renderer;
+    var frustumSize = 100;
+
+    init();
+    animate();
+    function init (){
+        container = document.createElement("div");
+        document.body.appendChild(container);
+
+        var aspect = window.innerWidth/window.innerHeight;
+        /*
+        *正交投影相机
+        * 参数为 左平面、右平面、顶平面 、下平面、近平面、远平面距离相机的距离
+        * */
+        camera = new THREE.OrthographicCamera(frustumSize * aspect / -2,frustumSize * aspect / 2, frustumSize/2,frustumSize/-2,1,2000);
+        camera.position.y = 400;
+        /*
+        * 创建一个场景
+        * */
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf0f0f0);
+        /*
+        * 创建一个鼠标控制器
+        * */
+        controls = new THREE.TrackballControls(camera);
+
+        /*
+        * 创建一个栅格平面对象
+        * */
+        var gridHelper = new  THREE.GridHelper(1000,20);
+        scene.add( gridHelper );
+
+        /*
+        * 创建一个立方体
+        * 创建一个基本的，不透光类型的材质
+        * */
+
+        var geometry = new THREE.BoxGeometry(50,50,50);
+        var material = new THREE.MeshLambertMaterial({color:0x000000,overdraw:0.54})
+
+        /*
+        * 为元素贴上材质
+        * */
+        for(var i=0;i<100;i++){
+            var cube = new THREE.Mesh(geometry,material);
+
+            cube.scale.y = Math.floor(Math.random() * 2 +1);
+
+            cube.position.x = Math.floor((Math.random()*1000 - 500) /50 )*50+25;
+            cube.position.y = (cube.scale.y * 50)/2;
+            cube.position.z = Math.floor((Math.random()*1000 - 500) /50)*50+25;
+
+            scene.add(cube);
+        }
+        /*
+        * 创建灯光（环境灯和方向光）
+        * */
+
+        var ambientLight = new THREE.AmbientLight(Math.random()*0x10)
+        scene.add(ambientLight);
+
+        var directionallight = new THREE.DirectionalLight(Math.random()*0xffffff);
+        directionallight.position.x = Math.random()-0.5;
+        directionallight.position.y = Math.random()-0.5;
+        directionallight.position.z = Math.random()-0.5;
+        directionallight.position.normalize();
+        scene.add(directionallight);
+
+        var directionallight = new THREE.DirectionalLight(Math.random()*0xffffff);
+        directionallight.position.x = Math.random()-0.5;
+        directionallight.position.y = Math.random()-0.5;
+        directionallight.position.z = Math.random()-0.5;
+        directionallight.position.normalize();
+        scene.add(directionallight);
+
+        /*
+        * 创建canvas 2D渲染
+        * setPixelRatio 木看明白设置什么
+        * */
+        renderer = new THREE.CanvasRenderer();
+        renderer.setPixelRatio()
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        stats = new Stats();
+        container.appendChild(stats.dom);
+
+        window.addEventListener('resize',onWindowResize,false);
+    }
+    //设置resize时间函数
+    function onWindowResize(){
+        var aspect = window.innerWidth/window.innerHeight;
+        camera.left = -frustumSize * aspect / 2;
+        camera.right = frustumSize * aspect /2;
+        camera.top = frustumSize / 2;
+        camera.bottom = -frustumSize / 2;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth,window.innerHeight);
+    }
+    /*
+    * requestAnimationFrame  帧动画函数，
+    * */
+    function animate(){
+        requestAnimationFrame(animate);
+        stats.begin();
+        render();
+        stats.end();
+    }
+    function render(){
+        var timer = Date.now()*0.0001;
+
+        camera.position.x = Math.cos(timer)*800;
+        camera.position.z = Math.sin(timer)*800;
+        camera.lookAt(scene.position);
+
+        controls.update()
+        renderer.render(scene,camera);
+    }
+</script>
+</body>
+</html>
