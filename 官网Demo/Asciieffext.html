@@ -2,7 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>复古文字效果创建</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>camera-cube</title>
+    <style>
+        /*body {*/
+            /*font-family: Monospace;*/
+            /*background-color: #f0f0f0;*/
+            /*margin: 0px;*/
+            /*overflow: hidden;*/
+        /*}*/
+    </style>
 </head>
 <body>
 <script src="../build/three.js"></script>
@@ -21,7 +30,7 @@
 
     var container ,stats;
     var camera , scene, renderer;
-    var frustumSize = 100;
+    var frustumSize = 1000;
 
     init();
     animate();
@@ -58,7 +67,7 @@
         * */
 
         var geometry = new THREE.BoxGeometry(50,50,50);
-        var material = new THREE.MeshLambertMaterial({color:0x000000,overdraw:0.54})
+        var material = new THREE.MeshLambertMaterial({color:0xffffff,overdraw:0.54})
 
         /*
         * 为元素贴上材质
@@ -100,7 +109,7 @@
         * setPixelRatio 木看明白设置什么
         * */
         renderer = new THREE.CanvasRenderer();
-        renderer.setPixelRatio()
+        renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth,window.innerHeight);
         container.appendChild(renderer.domElement);
 
